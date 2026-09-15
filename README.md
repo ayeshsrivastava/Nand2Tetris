@@ -1,12 +1,22 @@
-# Nand2Tetris - Project 1: Boolean Logic & Elementary Logic Gates
+# Nand2Tetris Hardware Implementations
 
-This repository contains Hardware Description Language (HDL) implementations for **Project 01** of the [Nand2Tetris](https://www.nand2tetris.org/) course ("The Elements of Computing Systems" by Noam Nisan and Shimon Schocken).
+This repository contains Hardware Description Language (HDL) implementations for the [Nand2Tetris](https://www.nand2tetris.org/) course ("The Elements of Computing Systems" by Noam Nisan and Shimon Schocken).
 
-## Overview
+## Repository Structure
 
-The goal of Project 01 is to build basic Boolean logic gates starting from the primitive **Nand** gate. Using elementary gates, higher-level multi-bit and multi-way logic gates are constructed step-by-step.
+```text
+.
+├── PROJECT 1/    # Elementary and multi-bit logic gates
+└── PROJECT 2/    # Boolean arithmetic and adders
+```
 
-## Implemented Chips
+---
+
+## Project 1: Boolean Logic & Elementary Logic Gates
+
+Project 01 builds elementary, multi-bit, and multi-way logic gates starting from the primitive **Nand** gate.
+
+### Implemented Chips (`PROJECT 1/`)
 
 | Chip Name | Description | Built From |
 | :--- | :--- | :--- |
@@ -26,11 +36,27 @@ The goal of Project 01 is to build basic Boolean logic gates starting from the p
 | `DMux4Way.hdl` | 1-to-4 Demultiplexor | `DMux` |
 | `DMux8Way.hdl` | 1-to-8 Demultiplexor | `DMux4Way` |
 
+---
+
+## Project 2: Boolean Arithmetic
+
+Project 02 builds arithmetic chips starting from basic adder components up to multi-bit adders.
+
+### Implemented Chips (`PROJECT 2/`)
+
+| Chip Name | Description | Built From |
+| :--- | :--- | :--- |
+| `HalfAdder.hdl` | Computes the sum of 2 bits | `Xor`, `And` |
+| `FullAdder.hdl` | Computes the sum of 3 bits | `HalfAdder`, `Or` |
+| `Add16.hdl` | 16-bit Adder (adds two 16-bit numbers) | `HalfAdder`, `FullAdder` |
+
+---
+
 ## How to Test
 
-You can test these HDL implementations using the **Nand2Tetris Hardware Simulator**:
+You can test any of these HDL implementations using the **Nand2Tetris Hardware Simulator**:
 
 1. Download the [Nand2Tetris Software Suite](https://www.nand2tetris.org/software).
 2. Launch `HardwareSimulator.bat` (Windows) or `HardwareSimulator.sh` (Mac/Linux).
-3. Load any `.hdl` file along with its corresponding `.tst` test script.
-4. Run the script and verify that the test output matches the `.cmp` file.
+3. Load any `.hdl` file from `PROJECT 1/` or `PROJECT 2/` along with its corresponding `.tst` test script.
+4. Run the test script and verify that the output matches the `.cmp` file.
