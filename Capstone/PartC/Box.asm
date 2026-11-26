@@ -1,85 +1,66 @@
-// Box.asm - Nand2Tetris Capstone Project (Part C)
-// Student Roll Number: 2501420061
-// Personal Number: K = 61
-//
-// Calculation:
-// - Start Row = K = 61
-// - Height = 20 rows (rows 61 through 80)
-// - Width = 16 * ((K mod 4) + 1) = 16 * ((61 mod 4) + 1) = 16 * 2 = 32 pixels
-// - Words per row = 32 pixels / 16 pixels per word = 2 words (from left edge)
-// - Screen base address = 16384 (SCREEN)
-// - Row 61 start address = SCREEN + 32 * 61 = 16384 + 1952 = 18336
-//
-// Behavior:
-// While any key is pressed, draws a black box (32 pixels wide, 20 rows high, starting at row 61).
-// When the key is released, clears the box (turns white).
+// Box.asm for Roll No: 2501420061 (K=61)
+// Box starts at row 61 (address 18336)
+// Width: 32 pixels (2 words)
+// Height: 20 rows
 
-(MAIN_LOOP)
-    // Check keyboard input
-    @KBD
-    D=M
+(MAIN)
+@KBD
+D=M
+@SET_BLACK
+D;JNE      // If any key is pressed, jump to SET_BLACK
 
-    // If key is pressed (KBD != 0), jump to KEY_PRESSED
-    @KEY_PRESSED
-    D;JNE
+// If no key, fill = 0 (white)
+@0
+D=A
+@fill
+M=D
+@DRAW
+0;JMP
 
-    // If key is released (KBD == 0), set color to 0 (white)
-    @color
-    M=0
-    @DRAW_BOX
-    0;JMP
+(SET_BLACK)
+// If key pressed, fill = -1 (black)
+@1
+D=-A
+@fill
+M=D
 
-(KEY_PRESSED)
-    // Set color to -1 (black: all 1s in 16-bit 2's complement)
-    @color
-    M=-1
+(DRAW)
+// Set starting address (Row 61 = 16384 + 32*61 = 18336)
+@18336
+D=A
+@ptr
+M=D
 
-(DRAW_BOX)
-    // Initialize rows_left = 20
-    @20
-    D=A
-    @rows_left
-    M=D
+// Set row counter to 20
+@20
+D=A
+@row_count
+M=D
 
-    // Initialize current_row = SCREEN + 32 * 61 = SCREEN + 1952 = 18336
-    @SCREEN
-    D=A
-    @1952
-    D=D+A
-    @current_row
-    M=D
+(DRAW_ROW)
+// Draw two words (32 pixels wide)
+@fill
+D=M
+@ptr
+A=M
+M=D        // Write first word (pixels 0-15)
 
-(ROW_LOOP)
-    // If rows_left == 0, finished drawing all 20 rows; check keyboard again
-    @rows_left
-    D=M
-    @MAIN_LOOP
-    D;JEQ
+@ptr
+A=M+1
+M=D        // Write second word (pixels 16-31)
 
-    // Load color into D
-    @color
-    D=M
+// Move pointer to the next row (+32)
+@32
+D=A
+@ptr
+M=M+D
 
-    // Write word 0 of current row (pixels 0 to 15)
-    @current_row
-    A=M
-    M=D
+// Decrement row counter
+@row_count
+M=M-1
+D=M
+@DRAW_ROW
+D;JGT      // If row_count > 0, draw next row
 
-    // Write word 1 of current row (pixels 16 to 31)
-    @current_row
-    A=M+1
-    M=D
-
-    // Advance to next row: current_row = current_row + 32
-    @32
-    D=A
-    @current_row
-    M=D+M
-
-    // Decrement rows_left
-    @rows_left
-    M=M-1
-
-    // Continue to next row
-    @ROW_LOOP
-    0;JMP
+@MAIN
+0;JMP
