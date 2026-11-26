@@ -1,6 +1,11 @@
-# Nand2Tetris Hardware Implementations
+# Nand2Tetris Hardware Implementations & Capstone Project
 
-This repository contains Hardware Description Language (HDL) implementations for the [Nand2Tetris](https://www.nand2tetris.org/) course ("The Elements of Computing Systems" by Noam Nisan and Shimon Schocken), along with the Capstone project modules.
+This repository contains Hardware Description Language (HDL) implementations for the [Nand2Tetris](https://www.nand2tetris.org/) course ("The Elements of Computing Systems" by Noam Nisan and Shimon Schocken), along with the complete Capstone Project modules.
+
+**Student Roll No:** 2501420061  
+**Personal Parameter:** $K = 61$  
+
+---
 
 ## Repository Structure
 
@@ -10,10 +15,10 @@ This repository contains Hardware Description Language (HDL) implementations for
 ├── PROJECT 2/    # Boolean arithmetic and ALU
 ├── PROJECT 3/    # Sequential logic and memory systems (Registers, RAM, PC)
 ├── PROJECT 5/    # Computer architecture (Memory, CPU, Computer)
-└── Capstone/     # Capstone modules
+└── Capstone/     # Capstone project modules (Parts A, B, and C)
     ├── PartA/    # Hardware architecture implementation & simulator verification
-    ├── PartB/    # Assembler & machine language
-    └── PartC/    # Software application / OS level
+    ├── PartB/    # Hack Assembler in Python (with K mod 3 = 1 error handling)
+    └── PartC/    # Box interactive program in Hack assembly (for K = 61)
 ```
 
 ---
@@ -93,26 +98,43 @@ Project 05 brings together the processing unit, memory units, and peripheral add
 
 ---
 
-## Capstone Project
+## Capstone Project: Make the Computer Draw a Box
 
-The Capstone organizes the comprehensive computer architecture implementation:
+### Student Configuration
+- **Roll No:** `2501420061`
+- **$K$ (Last two digits):** `61`
+- **$K \pmod 3$:** $61 \pmod 3 = 1$
+- **$K \pmod 4$:** $61 \pmod 4 = 1$
 
-### Part A: Complete Architecture & Hardware Verification (`Capstone/PartA/`)
-- **`Memory.hdl`**: Address decoding for data memory, screen, and keyboard mapping.
-- **`CPU.hdl`**: Execution unit for Hack instructions, decoding, arithmetic operations, and conditional jumps.
-- **`Computer.hdl`**: Top-level integration of CPU, Memory, and Instruction ROM.
-- **`screenshot/`**: Verification outputs and test execution proof across test scripts (`ComputerAdd`, `ComputerMax`, `ComputerRect`, `CPU`, `CPU-External`, `Memory`).
+### Part A: Computer Architecture & Hardware Verification (`Capstone/PartA/`)
+- **`Memory.hdl`**, **`CPU.hdl`**, **`Computer.hdl`**: Complete Hack computer implementation.
+- **`screenshot/`**: Official Hardware Simulator verification test screenshots for `ComputerAdd`, `ComputerMax`, `ComputerRect`, `CPU`, `CPU-External`, and `Memory`.
 
-### Part B & Part C (`Capstone/PartB/`, `Capstone/PartC/`)
-- Scaffolded modules for assembler, software translation, and application execution.
+### Part B: Hack Assembler in Python (`Capstone/PartB/`)
+- **`assembler.py`**: Two-pass assembler translating Hack assembly (`.asm`) into binary machine code (`.hack`).
+  - Predefined symbols (`R0`-`R15`, `SP`, `LCL`, `ARG`, `THIS`, `THAT`, `SCREEN`, `KBD`).
+  - Label resolution and variable address allocation starting at RAM 16.
+  - **Extra Feature for $K \pmod 3 = 1$**: Robust error diagnostics with exact source line numbers (e.g. `Line 7: invalid instruction '<line>' (<reason>)`) without crashing.
+- **Tests**: Validated on `Add.asm`, `Max.asm`, and error reporting verified on `invalid_test.asm`.
+
+### Part C: Interactive Box Program (`Capstone/PartC/`)
+- **`Box.asm`**: Written in Hack assembly for $K = 61$:
+  - **Start Row:** Row $K = 61$ ($\text{address} = \text{SCREEN} + 32 \times 61 = 18336$).
+  - **Height:** 20 rows tall (rows 61 to 80).
+  - **Width:** $16 \times ((K \pmod 4) + 1) = 16 \times (1 + 1) = 32$ pixels wide (2 words from left edge).
+  - **Interaction:** Checks `@KBD`. While any key is pressed, draws the black box. When the key is released, clears the box.
+- **`Box.hack`**: Machine code assembled directly with our Part B `assembler.py`.
 
 ---
 
-## How to Test
+## How to Run & Test
 
-You can test any of these HDL implementations using the **Nand2Tetris Hardware Simulator**:
+### Running the Assembler (Part B)
+```bash
+python Capstone/PartB/assembler.py Capstone/PartB/Add.asm
+python Capstone/PartB/assembler.py Capstone/PartC/Box.asm Capstone/PartC/Box.hack
+```
 
-1. Download the [Nand2Tetris Software Suite](https://www.nand2tetris.org/software).
-2. Launch `HardwareSimulator.bat` (Windows) or `HardwareSimulator.sh` (Mac/Linux).
-3. Load any `.hdl` file from the respective project folder along with its corresponding `.tst` test script.
-4. Run the test script and verify that the output matches the `.cmp` file.
+### Running Hardware & CPU Emulators
+1. Launch the **Nand2Tetris Hardware Simulator** to test HDL files with `.tst` scripts.
+2. Launch the **Nand2Tetris CPU Emulator** or **Hardware Simulator** to load and run `Box.hack` / `Box.tst`.
