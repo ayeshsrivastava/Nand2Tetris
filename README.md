@@ -1,6 +1,6 @@
 # Nand2Tetris Hardware Implementations
 
-This repository contains Hardware Description Language (HDL) implementations for the [Nand2Tetris](https://www.nand2tetris.org/) course ("The Elements of Computing Systems" by Noam Nisan and Shimon Schocken).
+This repository contains Hardware Description Language (HDL) implementations for the [Nand2Tetris](https://www.nand2tetris.org/) course ("The Elements of Computing Systems" by Noam Nisan and Shimon Schocken), along with the Capstone project modules.
 
 ## Repository Structure
 
@@ -8,7 +8,12 @@ This repository contains Hardware Description Language (HDL) implementations for
 .
 ├── PROJECT 1/    # Elementary and multi-bit logic gates
 ├── PROJECT 2/    # Boolean arithmetic and ALU
-└── PROJECT 3/    # Sequential logic and memory systems (Registers, RAM, PC)
+├── PROJECT 3/    # Sequential logic and memory systems (Registers, RAM, PC)
+├── PROJECT 5/    # Computer architecture (Memory, CPU, Computer)
+└── Capstone/     # Capstone modules
+    ├── PartA/    # Hardware architecture implementation & simulator verification
+    ├── PartB/    # Assembler & machine language
+    └── PartC/    # Software application / OS level
 ```
 
 ---
@@ -74,11 +79,40 @@ Project 03 constructs sequential memory components, progressing from a 1-bit reg
 
 ---
 
+## Project 5: Computer Architecture
+
+Project 05 brings together the processing unit, memory units, and peripheral addressing to build the complete Hack Computer platform.
+
+### Implemented Chips (`PROJECT 5/`)
+
+| Chip Name | Description | Built From |
+| :--- | :--- | :--- |
+| `Memory.hdl` | Complete Hack address space (RAM16K, Screen, Keyboard) | `RAM16K`, `Screen`, `Keyboard`, `DMux4Way`, `Mux4Way16` |
+| `CPU.hdl` | Hack Central Processing Unit | `ALU`, `ARegister`, `DRegister`, `PC`, `Mux16` |
+| `Computer.hdl` | Complete Hack Computer system | `CPU`, `Memory`, `ROM32K` |
+
+---
+
+## Capstone Project
+
+The Capstone organizes the comprehensive computer architecture implementation:
+
+### Part A: Complete Architecture & Hardware Verification (`Capstone/PartA/`)
+- **`Memory.hdl`**: Address decoding for data memory, screen, and keyboard mapping.
+- **`CPU.hdl`**: Execution unit for Hack instructions, decoding, arithmetic operations, and conditional jumps.
+- **`Computer.hdl`**: Top-level integration of CPU, Memory, and Instruction ROM.
+- **`screenshot/`**: Verification outputs and test execution proof across test scripts (`ComputerAdd`, `ComputerMax`, `ComputerRect`, `CPU`, `CPU-External`, `Memory`).
+
+### Part B & Part C (`Capstone/PartB/`, `Capstone/PartC/`)
+- Scaffolded modules for assembler, software translation, and application execution.
+
+---
+
 ## How to Test
 
 You can test any of these HDL implementations using the **Nand2Tetris Hardware Simulator**:
 
 1. Download the [Nand2Tetris Software Suite](https://www.nand2tetris.org/software).
 2. Launch `HardwareSimulator.bat` (Windows) or `HardwareSimulator.sh` (Mac/Linux).
-3. Load any `.hdl` file from `PROJECT 1/`, `PROJECT 2/`, or `PROJECT 3/` along with its corresponding `.tst` test script.
+3. Load any `.hdl` file from the respective project folder along with its corresponding `.tst` test script.
 4. Run the test script and verify that the output matches the `.cmp` file.
